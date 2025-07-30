@@ -1,10 +1,14 @@
 import { memo } from 'react';
+import gitHubLogo from '../../assets/logos/github-logo.png';
+
 const FooterComponent: React.FC = () => {
   return (
-    <footer>
-      <div>
-        <p>🎨 Art Collection </p>
-        <p>Assign Teste</p>
+    <footer className="footer">
+      <div className="wrapper">
+        <div className="footer__link">
+          <a href="https://github.com/Miltonr87/" target="_blank"></a>
+          <small>Milton Rodrigues</small>
+        </div>
       </div>
     </footer>
   );

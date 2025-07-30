@@ -1,6 +1,7 @@
 import { memo } from 'react';
+import museumLogoLight from '../../assets/logos/museum-logo-light.svg';
 import homeIcon from '../../assets/icons/home-icon.svg';
-import bookmarkIcon from '../../assets/icons/bookmark-icon.svg';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   isHomePage: boolean;
@@ -8,23 +9,29 @@ interface HeaderProps {
 
 const HeaderComponent: React.FC<HeaderProps> = ({ isHomePage }) => {
   return (
-    <header>
-      <p>🎨 Art Collection </p>
-      <nav>
-        <ul>
-          {!isHomePage && (
+    <header className="header">
+      <div className="wrapper">
+        <Link to="/" className="header__navlist__link">
+          <img src={museumLogoLight} alt="Museum icon with museum title" />
+        </Link>
+        <nav className="header__nav">
+          <ul className="header__navlist">
+            {!isHomePage && (
+              <li>
+                <Link to="/" className="header__navlist__link">
+                  <img src={homeIcon} alt="Home icon" />
+                  <span>Home</span>
+                </Link>
+              </li>
+            )}
             <li>
-              <img src={homeIcon} alt="Home icon" />
-              <span>Home</span>
+              <Link to="/favorites" className="header__navlist__link">
+                <span>Favorites</span>
+              </Link>
             </li>
-          )}
-
-          <li>
-            <img src={bookmarkIcon} alt="Home icon" />
-            <span>Favorites</span>
-          </li>
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      </div>
     </header>
   );
 };
