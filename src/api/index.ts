@@ -84,8 +84,8 @@ export async function fetchSearchResults(searchTerm: string): Promise<ArtworksRe
     serverURL: SERVER_URL,
     endpoint: ARTWORKS_SEARCH_ENDPOINT,
     params: {
-      q: searchTerm,
-      hasImages: true,
+      artistOrCulture: true,
+      q: searchTerm
     },
   });
 

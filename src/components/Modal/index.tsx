@@ -8,6 +8,7 @@ interface ModalProps {
 }
 
 export const Modal: React.FC<ModalProps> = ({ imageId, altText, onClose }) => {
+  console.log('Modal rendered with imageId:', imageId, 'and altText:', altText);
   const modalRoot = document.getElementById('modal-root');
 
   return createPortal(
@@ -20,7 +21,7 @@ export const Modal: React.FC<ModalProps> = ({ imageId, altText, onClose }) => {
       </div>
       <div onClick={e => e.stopPropagation()} className="modal__content">
         <img
-          src={`https://www.artic.edu/iiif/2/${imageId}/full/843,/0/default.jpg`}
+          src={`${imageId}`}
           alt="Zoomed artwork image"
           className="modal__image"
         />
