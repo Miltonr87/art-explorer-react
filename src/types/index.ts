@@ -4,7 +4,7 @@ export interface RouterType {
   element: React.ReactElement;
 }
 
-interface Thumbnail {
+export interface Thumbnail {
   lqip: string;
   height: number;
   width: number;
@@ -25,21 +25,19 @@ export interface Artwork {
   is_public_domain: boolean;
 }
 
-export interface ArtworksResponse {
-  data: Artwork[];
+export interface Pagination {
+  total: number;
+  limit: number;
+  offset: number;
+  total_pages: number;
+  current_page: number;
 }
 
-export interface SearchResult {
-  _score: number;
-  id: number;
-  api_model: string;
-  api_link: string;
-  is_boosted: boolean;
-  title: string;
-  thumbnail: Thumbnail;
-  timestamp: string;
+export interface ArtworksResponse {
+  data: Artwork[];
+  pagination: Pagination;
 }
 
 export interface SearchResponse {
-  data: SearchResult[];
+  objectIDs?: number[];
 }

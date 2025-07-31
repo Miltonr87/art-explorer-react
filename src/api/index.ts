@@ -8,7 +8,21 @@ import {
 } from '../constants';
 import { ArtworksResponse, Artwork, SearchResponse } from '../types';
 
-function transformArtwork(data: any): Artwork {
+interface RawArtwork {
+  objectID: number;
+  title: string;
+  artistDisplayName: string;
+  accessionNumber: string;
+  objectDate: string;
+  country: string;
+  creditLine: string;
+  dimensions: string;
+  primaryImageSmall?: string;
+  primaryImage?: string;
+  isPublicDomain: boolean;
+}
+
+function transformArtwork(data: RawArtwork): Artwork {
   return {
     id: data.objectID,
     title: data.title,
@@ -22,10 +36,13 @@ function transformArtwork(data: any): Artwork {
     thumbnail: {
       lqip: data.primaryImageSmall || '',
       alt_text: data.title,
+      height: 100,
+      width: 100,
     },
-    is_public_domain: data.isPublicDomain,
+    is_public_domain: Boolean(data.isPublicDomain),
   };
 }
+
 export interface Pagination {
   total: number;
   limit: number;
@@ -33,6 +50,7 @@ export interface Pagination {
   total_pages: number;
   current_page: number;
 }
+
 export async function fetchAvailableArtworks(page: number = 1): Promise<ArtworksResponse> {
   const searchURL = buildURL({
     serverURL: SERVER_URL,
@@ -44,25 +62,25 @@ export async function fetchAvailableArtworks(page: number = 1): Promise<Artworks
   });
 
   const searchResponse = await fetchData<SearchResponse>(searchURL);
-  const allIds = searchResponse.objectIDs || [];
+  const allIds: number[] = searchResponse.objectIDs || [];
 
   const offset = (page - 1) * NUMBER_OF_ITEMS;
   const paginatedIds = allIds.slice(offset, offset + NUMBER_OF_ITEMS);
 
   const artworkDetails = await Promise.all(
-    paginatedIds.map(async id => {
+    paginatedIds.map(async (id: number) => {
       const artworkURL = buildURL({
         serverURL: SERVER_URL,
         endpoint: `${ARTWORKS_ENDPOINT}/${id}`,
         params: {},
       });
       try {
-        const rawData = await fetchData<any>(artworkURL);
+        const rawData = await fetchData<RawArtwork>(artworkURL);
         return transformArtwork(rawData);
       } catch {
         return null;
       }
-    }),
+    })
   );
 
   const data = artworkDetails.filter(Boolean) as Artwork[];
@@ -85,29 +103,29 @@ export async function fetchSearchResults(searchTerm: string): Promise<ArtworksRe
     endpoint: ARTWORKS_SEARCH_ENDPOINT,
     params: {
       artistOrCulture: true,
-      q: searchTerm
+      q: searchTerm,
     },
   });
 
   const searchResponse = await fetchData<SearchResponse>(searchURL);
-  const allIds = searchResponse.objectIDs || [];
+  const allIds: number[] = searchResponse.objectIDs || [];
 
   const paginatedIds = allIds.slice(0, NUMBER_OF_ITEMS);
 
   const artworkDetails = await Promise.all(
-    paginatedIds.map(async id => {
+    paginatedIds.map(async (id: number) => {
       const artworkURL = buildURL({
         serverURL: SERVER_URL,
         endpoint: `${ARTWORKS_ENDPOINT}/${id}`,
         params: {},
       });
       try {
-        const rawData = await fetchData<any>(artworkURL);
+        const rawData = await fetchData<RawArtwork>(artworkURL);
         return transformArtwork(rawData);
       } catch {
         return null;
       }
-    }),
+    })
   );
 
   const data = artworkDetails.filter(Boolean) as Artwork[];

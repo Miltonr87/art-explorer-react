@@ -1,7 +1,7 @@
 interface BuildURLParams {
   endpoint: string;
   serverURL: string;
-  params: Record<string, string | number>;
+  params: Record<string, string | number | boolean>;
 }
 
 /**
