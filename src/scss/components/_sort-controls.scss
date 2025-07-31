@@ -1,0 +1,17 @@
+@use '../abstracts/' as a;
+
+.sort-controls {
+  @include a.flex-container($align: center, $gap: a.rem(8));
+  align-self: flex-start;
+
+  &__label {
+    font-size: var(--base-font-size);
+  }
+
+  &__select {
+    padding: a.rem(4);
+    border: a.rem(1) solid a.$color-black;
+    border-radius: a.rem(8);
+    font-size: var(--base-font-size);
+  }
+}

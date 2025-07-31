@@ -5,12 +5,8 @@
   width: 100vw;
   height: a.rem(128);
 
-  background: linear-gradient(
-    to left,
-    a.$color-start-lin-grad,
-    a.$color-middle-lin-grad,
-    a.$color-end-lin-grad
-  );
+  background: linear-gradient(to left, #000, #111);
+
   background-size: cover;
 
   .wrapper {
@@ -21,6 +17,10 @@
   &__nav {
     @include a.flex-container($align: center);
     width: fit-content;
+
+    @include a.breakpoint-down('medium') {
+      display: none;
+    }
   }
 
   &__navlist {

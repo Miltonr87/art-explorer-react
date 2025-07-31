@@ -8,20 +8,24 @@
     $gap: a.rem(32)
   );
 
+  @include a.breakpoint-down('xsmall') {
+    width: a.rem(300);
+  }
+
   &__heading {
     @include a.flex-container($direction: column);
     text-align: center;
   }
 
   &__subtitle {
-    font-size: a.rem(16);
+    font-size: var(--base-font-size);
     font-weight: 400;
 
-    color: a.$color-light-orange;
+    color: a.$color-light-yellow;
   }
 
   &__title {
-    font-size: a.rem(32);
+    font-size: calc(var(--base-font-size) * 1.75); // to fit in one line
     font-weight: 400;
   }
 }

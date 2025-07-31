@@ -1,0 +1,46 @@
+import { Ref } from 'react';
+import { Link } from 'react-router-dom';
+import homeIcon from '../../assets/icons/home-icon.png';
+import bookmarkIcon from '../../assets/icons/bookmark-light-orange-icon.png';
+import clearIcon from '../../assets/icons/clear-icon.png';
+import { ROUTES } from '../../constants';
+
+interface SidebarProps {
+  isHomePage: boolean;
+  ref: Ref<HTMLElement>;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({
+  isHomePage,
+  ref,
+  isOpen,
+  onClose,
+}) => {
+  return (
+    <aside ref={ref} className={`sidebar ${isOpen && 'sidebar_visible'}`}>
+      <button onClick={onClose} className="button button-close">
+        <img src={clearIcon} alt="Clear icon" />
+      </button>
+      <nav>
+        <ul className="sidebar__navlist">
+          {!isHomePage && (
+            <li>
+              <Link to={ROUTES.home} className="sidebar__navlist__link">
+                <img src={homeIcon} alt="Home icon" />
+                <span>Home</span>
+              </Link>
+            </li>
+          )}
+          <li>
+            <Link to={ROUTES.favorites} className="sidebar__navlist__link">
+              <img src={bookmarkIcon} alt="Bookmark icon" />
+              <span>Favorites</span>
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  );
+};

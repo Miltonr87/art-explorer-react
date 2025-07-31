@@ -1,0 +1,16 @@
+@use '../abstracts/' as a;
+
+.favorites {
+  @include a.flex-container(
+    $direction: column,
+    $gap: var(--base-vertical-flow)
+  );
+
+  .artwork-list {
+    @include a.flex-container($wrap: wrap, $align: center, $gap: a.rem(16));
+
+    @include a.breakpoint-down('small') {
+      justify-content: center;
+    }
+  }
+}

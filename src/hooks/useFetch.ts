@@ -24,7 +24,7 @@ export function useFetch({ fetchFn }: UseFetchProps) {
         const message =
           error instanceof Error
             ? error.message
-            : 'Error occured while fetching data. Check your internet connection';
+            : 'Error occured while fetching data from API';
         setError(message);
         setIsFetching(false);
       }
@@ -33,5 +33,5 @@ export function useFetch({ fetchFn }: UseFetchProps) {
     void fetchData();
   }, [fetchFn]);
 
-  return { artworks, isFetching, error };
+  return { artworks, setArtworks, isFetching, error };
 }

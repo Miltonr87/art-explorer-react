@@ -1,15 +1,31 @@
 @use '../abstracts/' as a;
 
 .artwork-page {
-  @include a.flex-container($direction: column, $gap: a.rem(120));
+  @include a.flex-container(
+    $direction: column,
+    $gap: var(--base-vertical-flow)
+  );
+
+  .artwork-container {
+    @include a.flex-container($direction: column, $gap: a.rem(16));
+  }
 
   .artwork-details {
     @include a.flex-container($gap: a.rem(80));
+
+    @include a.breakpoint-down('medium') {
+      flex-direction: column;
+      gap: a.rem(40);
+    }
 
     &__image-container {
       position: relative;
       max-width: a.rem(497);
       max-height: a.rem(570);
+
+      @include a.breakpoint-down('medium') {
+        max-width: a.rem(400);
+      }
     }
 
     &__image {
@@ -29,6 +45,10 @@
 
     &__description {
       @include a.flex-container($direction: column, $gap: a.rem(172));
+
+      @include a.breakpoint-down('medium') {
+        gap: a.rem(86);
+      }
     }
 
     &__heading {
@@ -36,27 +56,45 @@
     }
 
     &__title {
-      font-size: a.rem(32);
+      font-size: calc(var(--base-font-size) * 2);
       font-weight: 400;
 
       &_first {
         margin-bottom: a.rem(32);
+
+        @include a.breakpoint-down('medium') {
+          font-size: a.rem(36);
+          margin-bottom: a.rem(16);
+        }
       }
     }
 
     &__artist {
       margin-bottom: a.rem(16);
       font-size: a.rem(24);
-      color: a.$color-light-orange;
+      color: a.$color-light-yellow;
+
+      @include a.breakpoint-down('medium') {
+        font-size: a.rem(28);
+        margin-bottom: a.rem(8);
+      }
     }
 
     &__reference-number {
-      font-size: a.rem(16);
+      font-size: var(--base-font-size);
       font-weight: 700;
+
+      @include a.breakpoint-down('medium') {
+        font-size: a.rem(20);
+      }
     }
 
     &__overview {
       @include a.flex-container($direction: column, $gap: a.rem(32));
+
+      @include a.breakpoint-down('medium') {
+        gap: a.rem(16);
+      }
     }
 
     &__list {
@@ -64,11 +102,11 @@
     }
 
     &__item {
-      font-size: a.rem(16);
+      font-size: var(--base-font-size);
       list-style-type: none;
 
       &_highlighted {
-        color: a.$color-light-orange;
+        color: a.$color-light-yellow;
       }
     }
   }

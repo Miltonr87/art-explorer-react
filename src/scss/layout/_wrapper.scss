@@ -8,16 +8,69 @@
   margin: 0 auto;
   padding: 0 a.rem(16);
 
+  @include a.breakpoint-down('xsmall') {
+    padding: 0 a.rem(10);
+  }
+
   & .title {
+    @include a.flex-container(
+      $direction: column,
+      $align: center,
+      $gap: a.rem(8)
+    );
     width: a.rem(684);
+
     font-size: a.rem(64);
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.1;
     text-align: center;
     text-transform: capitalize;
+    color: a.$color-black;
 
-    &-accent {
-      color: a.$color-accent-orange;
+    @include a.breakpoint-down('medium') {
+      width: 100%;
+      font-size: a.rem(54);
+    }
+
+    @include a.breakpoint-down('small') {
+      font-size: a.rem(44);
+    }
+
+    &_accent {
+      color: a.$color-accent-yellow;
+      width: fit-content;
+    }
+
+    &__accent-block {
+      @include a.flex-container($justify: center);
+      text-align: center;
+    }
+
+    &__icon {
+      @include a.flex-container($justify: center, $align: center);
+      width: a.rem(72);
+      height: a.rem(72);
+
+      @include a.breakpoint-down('medium') {
+        width: a.rem(64);
+        height: a.rem(64);
+      }
+
+      img {
+        width: a.rem(32);
+        height: a.rem(42);
+      }
+    }
+  }
+
+  &__fallback-content {
+    margin-top: a.rem(32);
+    font-size: var(--base-font-size);
+    text-align: center;
+
+    a {
+      color: a.$color-accent-yellow;
+      text-decoration: underline wavy a.$color-accent-yellow;
     }
   }
 }
@@ -27,10 +80,23 @@ main .wrapper {
     $direction: column,
     $justify: center,
     $align: center,
-    $gap: a.rem(120)
+    $gap: calc(var(--base-vertical-flow))
   );
+  min-height: calc(
+    100vh - a.rem(128) * 2 - var(--base-vertical-flow) * 2
+  ); //window height (100vh) - footer and header height (128px * 2) - vertical flow height (120px * 2)
 }
 
 .artwork-page main .wrapper {
   @include a.flex-container();
+
+  &__fallback-content {
+    width: 100%; //rule to center fallback content on artwork page
+  }
+}
+
+.home .wrapper {
+  & .title {
+    display: inline;
+  }
 }

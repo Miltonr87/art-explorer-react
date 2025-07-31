@@ -5,7 +5,7 @@
   align-items: center;
   width: 100vw;
   height: a.rem(128);
-  background-color: a.$color-white;
+  background: linear-gradient(to left, #000, #111);
 
   .wrapper {
     display: flex;
@@ -15,10 +15,6 @@
 
   &__link {
     @include a.flex-container($align: center, $gap: a.rem(4));
-
-    & img {
-      width: a.rem(43);
-      height: a.rem(43);
-    }
+    color: #fff;
   }
 }

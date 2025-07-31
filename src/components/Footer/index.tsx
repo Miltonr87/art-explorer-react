@@ -6,7 +6,9 @@ const FooterComponent: React.FC = () => {
     <footer className="footer">
       <div className="wrapper">
         <div className="footer__link">
-          <a href="https://github.com/Miltonr87/" target="_blank"></a>
+          <a href="https://github.com/Miltonr87" target="_blank">
+            <img src={gitHubLogo} alt="Github logo" />
+          </a>
           <small>Milton Rodrigues</small>
         </div>
       </div>

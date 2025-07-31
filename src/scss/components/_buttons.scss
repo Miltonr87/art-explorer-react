@@ -1,4 +1,5 @@
 @use '../abstracts/' as a;
+@use 'sass:color';
 
 .button {
   @include a.flex-container($justify: center, $align: center);
@@ -15,28 +16,88 @@
   cursor: pointer;
 
   &:hover {
-    color: a.$color-gray;
-    background-color: lighten(a.$color-light-orange, 30%);
-    border-color: a.$color-light-orange;
+    color: a.$color-black;
+    background-color: color.scale(a.$color-light-yellow, $lightness: 30%);
+    border-color: a.$color-light-yellow;
+  }
+
+  @media (hover: none) {
+    &:hover {
+      background-color: transparent;
+      border-color: a.$color-card-border;
+    }
   }
 
   &.active {
-    background-color: lighten(a.$color-light-orange, 30%);
-    border-color: a.$color-light-orange;
+    background-color: color.scale(a.$color-light-yellow, $lightness: 30%);
+    border-color: a.$color-light-yellow;
   }
 
   &:disabled {
-    opacity: 50%;
     cursor: not-allowed;
   }
 
   &:disabled:hover {
-    background-color: initial;
-    border: initial;
+    background-color: a.$color-button-backgorund;
+    border: a.rem(2) solid a.$color-card-border;
   }
 
   &-favorite {
     width: a.rem(60);
     height: a.rem(60);
+
+    &:hover {
+      background-color: a.$color-button-backgorund;
+      border-color: a.$color-button-backgorund;
+    }
+
+    &.active {
+      &:hover {
+        background-color: color.scale(a.$color-light-yellow, $lightness: 30%);
+        border-color: a.$color-light-yellow;
+      }
+    }
+  }
+
+  &-close {
+    align-self: flex-end;
+    background-color: a.$color-black;
+    border-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+      border-color: a.$color-light-yellow;
+    }
+  }
+
+  &-burger {
+    display: none;
+    background-color: transparent;
+    border-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+      border-color: a.$color-white;
+    }
+
+    @include a.breakpoint-down('medium') {
+      display: flex;
+    }
+  }
+
+  &-navigate {
+    width: a.rem(80);
+    height: a.rem(60);
+    font-size: a.rem(16);
+  }
+
+  &-close-modal {
+    align-self: flex-end;
+    width: a.rem(40);
+    height: a.rem(40);
+
+    img {
+      width: a.rem(16);
+    }
   }
 }

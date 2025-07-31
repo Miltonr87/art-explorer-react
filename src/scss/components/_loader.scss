@@ -29,10 +29,10 @@
       spinner-fade 1.2s linear infinite;
   }
   &:before {
-    border-top-color: a.$color-gray;
+    border-top-color: a.$color-black;
   }
   &:after {
-    border-top-color: a.$color-accent-orange;
+    border-top-color: a.$color-accent-yellow;
     animation-delay: 0.4s;
   }
 
