@@ -10,7 +10,6 @@
     "lint": "eslint . --fix --max-warnings=0",
     "format": "prettier . --write --ignore-unknown",
     "preview": "vite preview",
-    "prepare": "husky install",
     "test": "jest --config jest.config.ts",
     "coverage": "jest test -- --coverage"
   },
