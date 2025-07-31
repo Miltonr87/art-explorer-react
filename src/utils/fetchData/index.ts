@@ -11,7 +11,7 @@ export async function fetchData<T>(url: URL): Promise<T> {
   try {
     const response = await axios.get<T>(url.toString());
     return response.data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status;
       const message = error.message || 'Axios request failed';

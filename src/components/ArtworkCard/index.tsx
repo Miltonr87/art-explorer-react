@@ -22,8 +22,9 @@ export const ArtworkCard: React.FC<ArtworkCardProps> = ({
   const goToArtworkPage = (artworkId: number) => {
     const updatedSearchParams = new URLSearchParams(search);
     updatedSearchParams.set('page', String(page));
-
-    //console.log is required for test
+    updatedSearchParams.set('artworkId', String(artworkId));
+    updatedSearchParams.delete('searchTerm'); // Clear search term if navigating to artwork page
+    updatedSearchParams.delete('search'); // Clear search if navigating to artwork page
     console.log(`Navigating to artwork page with ID: ${artworkId}`);
 
     window.scrollTo(0, 0);
@@ -38,7 +39,7 @@ export const ArtworkCard: React.FC<ArtworkCardProps> = ({
       <figure className="artwork__image-container">
         <a onClick={() => goToArtworkPage(artwork.id)}>
           <img
-            src={`https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`}
+            src={artwork.image_id}
             alt={artwork.thumbnail?.alt_text ?? artwork.title}
             onError={e => {
               e.currentTarget.src =

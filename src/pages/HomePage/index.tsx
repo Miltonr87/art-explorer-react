@@ -66,7 +66,11 @@ export const HomePage: React.FC = () => {
       {(isFetching || isSearching) && <Loader />}
       {error && <p>{error}</p>}
       {!isFetching && !isSearching && !error && artworks.length !== 0 && (
-        <SectionLayout subtitle="Artworks for you" title="Our special gallery">
+        <SectionLayout
+          subtitle="Artworks for you"
+          title="World Gallery of Art Masterpieces"
+          data-testid="artwork-list-section"
+        >
           <SortControls
             id="artworks-sorter"
             sortCriteria={sortCriteria}
