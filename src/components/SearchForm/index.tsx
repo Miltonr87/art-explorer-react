@@ -56,7 +56,7 @@ export const SearchForm: React.FC = () => {
         <img src={searchIcon} alt="Search icon" />
         <input
           type="text"
-          placeholder="Search Art, Artist, Work..."
+          placeholder="Search Art, Artist, Work did not worked... Need to fix it!"
           value={searchTerm}
           onChange={e => handleSearchTermChange(e.target.value)}
           maxLength={60}
