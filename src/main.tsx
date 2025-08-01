@@ -1,10 +1,13 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './components/App/App';
-import './scss/main.scss';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './scss/main.scss'; // ✅ correct path to SCSS
+import { ThemeProvider } from './context/ThemeContext';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
 );

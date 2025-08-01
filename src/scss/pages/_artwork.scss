@@ -1,6 +1,13 @@
 @use '../abstracts/' as a;
 
 .artwork-page {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
+
   @include a.flex-container(
     $direction: column,
     $gap: var(--base-vertical-flow)
@@ -37,9 +44,7 @@
     &__button {
       width: fit-content;
       position: absolute;
-      bottom: calc(
-        100% - a.rem(60) - a.rem(16)
-      ); // 100% - button size (60px) - indent from image border (16px)
+      bottom: calc(100% - a.rem(60) - a.rem(16));
       left: calc(100% - a.rem(60) - a.rem(16));
     }
 
