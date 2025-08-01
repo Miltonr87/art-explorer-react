@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import clearIcon from '../../assets/icons/clear-icon.png';
+import clearIcon from '../../assets/icons/clear-icon.svg';
 
 interface ModalProps {
   imageId: string;

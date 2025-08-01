@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { FavoritesContext } from '../../store';
 import { Artwork } from '../../types';
-import bookmarkIcon from '../../assets/icons/bookmark-icon.png';
+import bookmarkIcon from '../../assets/icons/bookmark-icon.svg';
 
 interface FavoriteButtonProps {
   artwork: Artwork;

@@ -1,8 +1,8 @@
 import { Ref } from 'react';
 import { Link } from 'react-router-dom';
-import homeIcon from '../../assets/icons/home-icon.png';
-import bookmarkIcon from '../../assets/icons/bookmark-light-orange-icon.png';
-import clearIcon from '../../assets/icons/clear-icon.png';
+import homeIcon from '../../assets/icons/home-icon.svg';
+import bookmarkIcon from '../../assets/icons/bookmark-light-orange-icon.svg';
+import clearIcon from '../../assets/icons/clear-icon.svg';
 import { ROUTES } from '../../constants';
 
 interface SidebarProps {

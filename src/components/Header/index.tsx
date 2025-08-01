@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { useDetectOutsideClick } from '../../hooks/useDetectOutsideClick';
 import { Sidebar } from '../Sidebar';
 import museumLogoLight from '../../assets/logos/art-collection.png';
-import homeIcon from '../../assets/icons/home-icon.png';
-import bookmarkIcon from '../../assets/icons/bookmark-light-orange-icon.png';
-import burgerIcon from '../../assets/icons/burger-icon.png';
+import homeIcon from '../../assets/icons/home-icon.svg';
+import bookmarkIcon from '../../assets/icons/bookmark-light-orange-icon.svg';
+import burgerIcon from '../../assets/icons/burger-icon.svg';
 import { ROUTES } from '../../constants';
 
 interface HeaderProps {
