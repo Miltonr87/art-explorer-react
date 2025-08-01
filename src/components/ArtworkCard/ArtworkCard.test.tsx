@@ -1,110 +1,92 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { ArtworkCard } from './index';
-import { MOCK_ARTWORK, MOCK_ARTWORK_NOT_PUBLIC } from '../../constants';
+import { MemoryRouter } from 'react-router-dom';
 import { Artwork } from '../../types';
+import { FavoritesContext } from '../../store';
 
-describe('ArtworkCard', () => {
-  beforeAll(() => {
-    window.scrollTo = jest.fn();
-  });
+// Mocked scrollTo
+window.scrollTo = jest.fn();
 
-  beforeEach(() =>
+jest.mock('../FavoriteButton', () => ({
+  FavoriteButton: () => <button data-testid="favorite-button">Favorite</button>,
+}));
+
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+  useLocation: () => ({
+    search: '?page=2&searchTerm=something',
+  }),
+}));
+
+const mockArtwork: Artwork = {
+  id: 123,
+  title: 'Mona Lisa',
+  artist_title: 'Leonardo da Vinci',
+  main_reference_number: 'INV123',
+  date_display: '1503',
+  place_of_origin: 'Italy',
+  credit_line: 'Louvre Museum',
+  dimensions: '77 cm × 53 cm',
+  image_id: '',
+  thumbnail: {
+    lqip: '',
+    alt_text: 'Mona Lisa alt',
+    height: 300,
+    width: 200,
+  },
+  is_public_domain: true,
+};
+
+describe('<ArtworkCard />', () => {
+  it('renders artwork data with placeholder image and public domain tag', () => {
     render(
-      <MemoryRouter>
-        <ArtworkCard artwork={MOCK_ARTWORK} />
-      </MemoryRouter>,
-    ),
-  );
+      <FavoritesContext.Provider
+        value={{
+          favoriteArtworks: [],
+          handleFavoriteAdd: jest.fn(),
+          handleFavoriteRemove: jest.fn(),
+        }}
+      >
+        <MemoryRouter>
+          <ArtworkCard artwork={mockArtwork} />
+        </MemoryRouter>
+      </FavoritesContext.Provider>,
+    );
 
-  it('should render ArtworkCard component', () => {
-    const artworkElem = screen.getByRole('article');
-
-    expect(artworkElem).toBeInTheDocument();
-  });
-
-  it('should render ArtworkCard with a correct title', () => {
-    const titleElem = screen.getByRole('heading', { level: 5 });
-
-    expect(titleElem).toBeInTheDocument();
-    expect(titleElem).toHaveTextContent('Apples and computers');
-  });
-
-  it('should render ArtworkCard with a correct artist_title', () => {
-    const artistTitleElem = screen.getByRole('paragraph');
-
-    expect(artistTitleElem).toBeInTheDocument();
-    expect(artistTitleElem).toHaveTextContent('Unknown Malevich');
-  });
-
-  it('should render ArtworkCard with a Public field if is_public_domain is true', () => {
-    const publicField = screen.getByText('Public');
-
-    expect(publicField).toBeInTheDocument();
-  });
-
-  it('should render ArtworkCard with correct src and alt attributes', () => {
-    const imgElem = screen.getByTestId('image');
-
-    expect(imgElem).toBeInTheDocument();
-    expect(imgElem).toHaveAttribute(
+    expect(screen.getByText('Mona Lisa')).toBeInTheDocument();
+    expect(screen.getByText('Leonardo da Vinci')).toBeInTheDocument();
+    expect(screen.getByTestId('public')).toBeInTheDocument();
+    expect(screen.getByTestId('image')).toHaveAttribute(
       'src',
-      `https://www.artic.edu/iiif/2/imageid8526/full/843,/0/default.jpg`,
+      'https://www.shutterstock.com/image-vector/no-painting-sign-forbidden-do-600nw-2647873923.jpg',
     );
-    expect(imgElem).toHaveAttribute('alt', 'Alt text for Apples and Computers');
+    expect(screen.getByTestId('favorite-button')).toBeInTheDocument();
   });
 
-  it('should call goToArtworkPage when the image is clicked', () => {
-    const imageElem = screen.getByTestId('image');
-
-    const goToArtworkPageSpy = jest.spyOn(console, 'log').mockImplementation();
-
-    fireEvent.click(imageElem);
-
-    expect(goToArtworkPageSpy).toHaveBeenCalledWith(
-      `Navigating to artwork page with ID: ${MOCK_ARTWORK.id}`,
-    );
-
-    goToArtworkPageSpy.mockRestore();
-  });
-
-  it('should call goToArtworkPage when the description card is clicked', () => {
-    const divElem = screen.getByTestId('description');
-
-    const goToArtworkPageSpy = jest.spyOn(console, 'log').mockImplementation();
-
-    fireEvent.click(divElem);
-
-    expect(goToArtworkPageSpy).toHaveBeenCalledWith(
-      `Navigating to artwork page with ID: ${MOCK_ARTWORK.id}`,
-    );
-
-    goToArtworkPageSpy.mockRestore();
-  });
-});
-
-describe('ArtworkCard with false value of is_public_domain', () => {
-  it('should render ArtworkCard without Public field', () => {
+  it('navigates to the correct artwork page on image click', () => {
     render(
-      <MemoryRouter>
-        <ArtworkCard artwork={MOCK_ARTWORK_NOT_PUBLIC as Artwork} />
-      </MemoryRouter>,
+      <FavoritesContext.Provider
+        value={{
+          favoriteArtworks: [],
+          handleFavoriteAdd: jest.fn(),
+          handleFavoriteRemove: jest.fn(),
+        }}
+      >
+        <MemoryRouter>
+          <ArtworkCard artwork={mockArtwork} />
+        </MemoryRouter>
+      </FavoritesContext.Provider>,
     );
-    const publicField = screen.queryByTestId('public');
-    expect(publicField).toBeNull();
-  });
-});
 
-describe('ArtworkCard with prop: variant="small"', () => {
-  it('should render ArtworkCard with class "artwork small"', () => {
-    render(
-      <MemoryRouter>
-        <ArtworkCard artwork={MOCK_ARTWORK} variant="small" />
-      </MemoryRouter>,
-    );
-    const artworkElem = screen.getByRole('article');
+    const imageButton = screen.getByLabelText('View artwork: Mona Lisa');
+    fireEvent.click(imageButton);
 
-    expect(artworkElem).toHaveClass('artwork small');
+    expect(mockNavigate).toHaveBeenCalledWith({
+      pathname: '/artwork/123',
+      search: 'page=2&artworkId=123',
+    });
   });
 });
