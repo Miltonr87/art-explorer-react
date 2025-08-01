@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext, useCallback } from 'react';
-import { useDebounce } from '../../hooks/useDebounce';
+import { useState, useContext, useCallback } from 'react';
 import { ArtworksContext } from '../../store';
 import { fetchSearchResults } from '../../api';
 import { validateInput } from '../../utils/validationFunctions';
@@ -13,41 +12,37 @@ export const SearchForm: React.FC = () => {
   const { setArtworks, isSearching, setIsSearching } =
     useContext(ArtworksContext);
 
-  const debouncedValidation = useDebounce({ value: searchTerm, delay: 1500 });
-  const debouncedSearchTerm = useDebounce({
-    value: searchTerm,
-    delay: 500,
-  });
+  const handleSearchClick = async () => {
+    const term = searchTerm.toLowerCase().trim();
+    const errorsFound = validateInput(term);
+    setErrors(errorsFound);
+    if (errorsFound.length > 0) return;
 
-  useEffect(() => {
-    setErrors(validateInput(debouncedValidation.trim()));
-  }, [debouncedValidation]);
-
-  useEffect(() => {
-    setNoResults(false);
-    const isValidInput = debouncedSearchTerm.length >= 3 && errors.length === 0;
-
-    if (isValidInput) {
-      setIsSearching(true);
-      fetchSearchResults(debouncedSearchTerm)
-        .then(results => {
-          if (results.data.length === 0) {
-            setNoResults(true);
-          } else {
-            setNoResults(false);
-            setArtworks(results.data);
-          }
-        })
-        .finally(() => setIsSearching(false));
+    setIsSearching(true);
+    try {
+      const response = await fetchSearchResults(term);
+      if (!response.data.length) {
+        setNoResults(true);
+        setArtworks([]);
+      } else {
+        setNoResults(false);
+        setArtworks(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    } finally {
+      setIsSearching(false);
     }
-  }, [debouncedSearchTerm, errors]);
+  };
 
   const handleSearchTermChange = useCallback((value: string) => {
-    setSearchTerm(value);
+    setSearchTerm(value.toLowerCase());
   }, []);
 
   const handleClearSearchTerm = useCallback(() => {
     setSearchTerm('');
+    setErrors([]);
+    setNoResults(false);
   }, []);
 
   return (
@@ -56,7 +51,7 @@ export const SearchForm: React.FC = () => {
         <img src={searchIcon} alt="Search icon" />
         <input
           type="text"
-          placeholder="Search Art, Artist, Work did not worked... Need to fix it!"
+          placeholder="Search Art, Artist, Work..."
           value={searchTerm}
           onChange={e => handleSearchTermChange(e.target.value)}
           maxLength={60}
@@ -69,6 +64,13 @@ export const SearchForm: React.FC = () => {
         >
           X
         </button>
+        <button
+          onClick={handleSearchClick}
+          className="search-form__search-button"
+          disabled={searchTerm.trim() === ''}
+        >
+          Search
+        </button>
       </div>
 
       {errors.length > 0 && (
@@ -80,7 +82,9 @@ export const SearchForm: React.FC = () => {
           ))}
         </ul>
       )}
+
       {isSearching && <p>Searching for results...</p>}
+
       {noResults && !isSearching && (
         <p>
           Nothing was found for your request. Try out searching for something

@@ -6,7 +6,6 @@ import { SectionLayout } from '../../components/SectionLayout';
 import { Loader } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination';
 import { ArtworkCard } from '../../components/ArtworkCard';
-import { SortControls } from '../../components/SortControls';
 import { SearchForm } from '../../components/SearchForm';
 
 export const HomePage: React.FC = () => {
@@ -18,14 +17,8 @@ export const HomePage: React.FC = () => {
   const page = searchParams.get('page') || 1;
   const pageIndex = Number(page) - 1;
 
-  const {
-    artworks,
-    isFetching,
-    error,
-    sortCriteria,
-    setSortCriteria,
-    isSearching,
-  } = useContext(ArtworksContext);
+  const { artworks, isFetching, error, isSearching } =
+    useContext(ArtworksContext);
 
   const itemsOnPage = 5;
   const lastPageIndex = Math.ceil(artworks.length / itemsOnPage) - 1;
@@ -33,13 +26,6 @@ export const HomePage: React.FC = () => {
   const currentArtworks = artworks.slice(
     pageIndex * itemsOnPage,
     (pageIndex + 1) * itemsOnPage,
-  );
-
-  const handleSortCriteriaChange = useCallback(
-    (value: string) => {
-      setSortCriteria(value);
-    },
-    [setSortCriteria],
   );
 
   const handlePageChange = useCallback(
@@ -71,11 +57,6 @@ export const HomePage: React.FC = () => {
           title="World Gallery of Art Masterpieces"
           data-testid="artwork-list-section"
         >
-          <SortControls
-            id="artworks-sorter"
-            sortCriteria={sortCriteria}
-            onSortCriteriaChange={handleSortCriteriaChange}
-          />
           <div className="artwork-list">
             {currentArtworks.map(artwork => (
               <ArtworkCard key={artwork.id} artwork={artwork} />

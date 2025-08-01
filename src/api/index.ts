@@ -1,11 +1,5 @@
-import { buildURL } from '../utils/buildURL';
 import { fetchData } from '../utils/fetchData';
-import {
-  ARTWORKS_ENDPOINT,
-  ARTWORKS_SEARCH_ENDPOINT,
-  SERVER_URL,
-  NUMBER_OF_ITEMS,
-} from '../constants';
+import { NUMBER_OF_ITEMS } from '../constants';
 import { ArtworksResponse, Artwork, SearchResponse } from '../types';
 
 interface RawArtwork {
@@ -52,16 +46,8 @@ export interface Pagination {
 }
 
 export async function fetchAvailableArtworks(page: number = 1): Promise<ArtworksResponse> {
-  const searchURL = buildURL({
-    serverURL: SERVER_URL,
-    endpoint: ARTWORKS_SEARCH_ENDPOINT,
-    params: {
-      hasImages: true,
-      q: 'painting',
-    },
-  });
-
-  const searchResponse = await fetchData<SearchResponse>(searchURL);
+  const searchPath = 'search?hasImages=true&q=painting';
+  const searchResponse = await fetchData<SearchResponse>(searchPath);
   const allIds: number[] = searchResponse.objectIDs || [];
 
   const offset = (page - 1) * NUMBER_OF_ITEMS;
@@ -69,13 +55,8 @@ export async function fetchAvailableArtworks(page: number = 1): Promise<Artworks
 
   const artworkDetails = await Promise.all(
     paginatedIds.map(async (id: number) => {
-      const artworkURL = buildURL({
-        serverURL: SERVER_URL,
-        endpoint: `${ARTWORKS_ENDPOINT}/${id}`,
-        params: {},
-      });
       try {
-        const rawData = await fetchData<RawArtwork>(artworkURL);
+        const rawData = await fetchData<RawArtwork>(`objects/${id}`);
         return transformArtwork(rawData);
       } catch {
         return null;
@@ -98,29 +79,18 @@ export async function fetchAvailableArtworks(page: number = 1): Promise<Artworks
 }
 
 export async function fetchSearchResults(searchTerm: string): Promise<ArtworksResponse> {
-  const searchURL = buildURL({
-    serverURL: SERVER_URL,
-    endpoint: ARTWORKS_SEARCH_ENDPOINT,
-    params: {
-      artistOrCulture: true,
-      q: searchTerm,
-    },
-  });
+  const query = encodeURIComponent(searchTerm.trim());
+  const searchPath = `search?artistOrCulture=true&q=${query}`;
 
-  const searchResponse = await fetchData<SearchResponse>(searchURL);
+  const searchResponse = await fetchData<SearchResponse>(searchPath);
   const allIds: number[] = searchResponse.objectIDs || [];
 
   const paginatedIds = allIds.slice(0, NUMBER_OF_ITEMS);
 
   const artworkDetails = await Promise.all(
     paginatedIds.map(async (id: number) => {
-      const artworkURL = buildURL({
-        serverURL: SERVER_URL,
-        endpoint: `${ARTWORKS_ENDPOINT}/${id}`,
-        params: {},
-      });
       try {
-        const rawData = await fetchData<RawArtwork>(artworkURL);
+        const rawData = await fetchData<RawArtwork>(`objects/${id}`);
         return transformArtwork(rawData);
       } catch {
         return null;

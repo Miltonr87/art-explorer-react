@@ -23,8 +23,8 @@ export const ArtworkCard: React.FC<ArtworkCardProps> = ({
     const updatedSearchParams = new URLSearchParams(search);
     updatedSearchParams.set('page', String(page));
     updatedSearchParams.set('artworkId', String(artworkId));
-    updatedSearchParams.delete('searchTerm'); // Clear search term if navigating to artwork page
-    updatedSearchParams.delete('search'); // Clear search if navigating to artwork page
+    updatedSearchParams.delete('searchTerm');
+    updatedSearchParams.delete('search');
     console.log(`Navigating to artwork page with ID: ${artworkId}`);
 
     window.scrollTo(0, 0);

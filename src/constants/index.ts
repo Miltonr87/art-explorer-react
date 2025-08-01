@@ -1,13 +1,7 @@
 import { Artwork } from '../types';
 
-export const SERVER_URL = 'https://collectionapi.metmuseum.org';
+export const NUMBER_OF_ITEMS = 30;
 
-export const ARTWORKS_ENDPOINT = '/public/collection/v1/objects';
-export const ARTWORKS_SEARCH_ENDPOINT = '/public/collection/v1/search';
-
-export const NUMBER_OF_ITEMS = 30; // simulate pagination: 30 items/page
-
-// The Met doesn't use field filtering, so keep only useful fields for your types
 export const REQUESTED_FIELDS = [
   'objectID',
   'title',

@@ -5,9 +5,12 @@
   width: 100vw;
   height: a.rem(128);
 
-  background: linear-gradient(to left, #000, #111);
-
+  background: #f07800;
   background-size: cover;
+
+  box-shadow:
+    0 0 15px rgba(255, 87, 34, 0.7),
+    0 0 30px rgba(255, 87, 34, 0.5);
 
   .wrapper {
     @include a.flex-container($justify: space-between);

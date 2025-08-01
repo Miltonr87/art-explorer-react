@@ -2,13 +2,13 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { FavoritesContext } from '../../store';
 import { FavoriteButton } from './index';
+import { Artwork } from '../../types';
 import {
   MOCK_ARTWORK_FAVORITE,
   MOCK_ARTWORK_NOT_FAVORITE,
 } from '../../constants';
-import { Artwork } from '../../types';
 
-it('should handle favorite add', () => {
+it('should add artwork to favorites', () => {
   const mockFavoriteContextValue = {
     favoriteArtworks: [MOCK_ARTWORK_FAVORITE as Artwork],
     handleFavoriteAdd: jest.fn(),
@@ -21,8 +21,7 @@ it('should handle favorite add', () => {
     </FavoritesContext.Provider>,
   );
 
-  const buttonElem = screen.getByRole('button');
-  fireEvent.click(buttonElem);
+  fireEvent.click(screen.getByRole('button'));
 
   expect(mockFavoriteContextValue.handleFavoriteAdd).toHaveBeenCalledWith(
     MOCK_ARTWORK_NOT_FAVORITE,
@@ -30,7 +29,7 @@ it('should handle favorite add', () => {
   expect(mockFavoriteContextValue.handleFavoriteRemove).not.toHaveBeenCalled();
 });
 
-it('should handle favorite remove', () => {
+it('should remove artwork from favorites', () => {
   const mockFavoriteContextValue = {
     favoriteArtworks: [MOCK_ARTWORK_FAVORITE as Artwork],
     handleFavoriteAdd: jest.fn(),
@@ -43,8 +42,7 @@ it('should handle favorite remove', () => {
     </FavoritesContext.Provider>,
   );
 
-  const buttonElem = screen.getByRole('button');
-  fireEvent.click(buttonElem);
+  fireEvent.click(screen.getByRole('button'));
 
   expect(mockFavoriteContextValue.handleFavoriteRemove).toHaveBeenCalledWith(
     MOCK_ARTWORK_FAVORITE.id,
