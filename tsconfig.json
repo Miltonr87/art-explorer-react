@@ -34,7 +34,6 @@
     "src/**/*.spec.ts",
     "src/setupTests.ts",
     "src/vite-env.d.ts",
-    "src/types",
     "src/assets",
     "src/styles",
     "src/components/Header.tsx",

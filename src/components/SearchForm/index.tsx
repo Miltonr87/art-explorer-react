@@ -74,8 +74,8 @@ export const SearchForm: React.FC = () => {
 
       {errors.length > 0 && (
         <ul className="search-form__error-list">
-          {errors.map((error, index) => (
-            <li key={index} className="search-form__error">
+          {errors.map(error => (
+            <li key={error} className="search-form__error">
               {error}
             </li>
           ))}
