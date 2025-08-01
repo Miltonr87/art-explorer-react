@@ -8,51 +8,59 @@ interface ArtworkCardProps {
   variant?: 'small';
 }
 
+const PLACEHOLDER_IMAGE =
+  'https://www.shutterstock.com/image-vector/no-painting-sign-forbidden-do-600nw-2647873923.jpg';
+
 export const ArtworkCard: React.FC<ArtworkCardProps> = ({
   artwork,
   variant,
 }) => {
-  const location = useLocation();
+  const { search } = useLocation();
   const navigate = useNavigate();
-  const { search } = location;
-
   const searchParams = new URLSearchParams(search);
-  const page = searchParams.get('page') || 1;
+  const page = searchParams.get('page') || '1';
 
   const goToArtworkPage = (artworkId: number) => {
     const updatedSearchParams = new URLSearchParams(search);
-    updatedSearchParams.set('page', String(page));
+    updatedSearchParams.set('page', page);
     updatedSearchParams.set('artworkId', String(artworkId));
     updatedSearchParams.delete('searchTerm');
     updatedSearchParams.delete('search');
-    console.log(`Navigating to artwork page with ID: ${artworkId}`);
 
     window.scrollTo(0, 0);
     navigate({
-      pathname: `${ROUTES.artwork.replace(':id', String(artworkId))}`,
+      pathname: ROUTES.artwork.replace(':id', String(artworkId)),
       search: updatedSearchParams.toString(),
     });
   };
 
+  const imageUrl = artwork.image_id?.trim()
+    ? artwork.image_id
+    : PLACEHOLDER_IMAGE;
+
   return (
-    <article className={`artwork ${variant === 'small' && 'small'}`}>
+    <article className={`artwork ${variant === 'small' ? 'small' : ''}`}>
       <figure className="artwork__image-container">
-        <a onClick={() => goToArtworkPage(artwork.id)}>
+        <button
+          onClick={() => goToArtworkPage(artwork.id)}
+          className="artwork__image-button"
+          aria-label={`View artwork: ${artwork.title}`}
+        >
           <img
-            src={artwork.image_id}
+            src={imageUrl}
             alt={artwork.thumbnail?.alt_text ?? artwork.title}
-            onError={e => {
-              e.currentTarget.src =
-                'https://placehold.co/843/f7d5a2/383838?text=no-image&font=lato';
-            }}
             className="artwork__image"
             data-testid="image"
           />
-        </a>
+        </button>
       </figure>
 
       <div className="artwork__description">
-        <a onClick={() => goToArtworkPage(artwork.id)}>
+        <button
+          onClick={() => goToArtworkPage(artwork.id)}
+          className="artwork__description-button"
+          aria-label={`View description for ${artwork.title}`}
+        >
           <div data-testid="description" className="artwork__heading">
             <div>
               <h5 className="artwork__title overflow">{artwork.title}</h5>
@@ -64,7 +72,8 @@ export const ArtworkCard: React.FC<ArtworkCardProps> = ({
               </span>
             )}
           </div>
-        </a>
+        </button>
+
         <FavoriteButton artwork={artwork} />
       </div>
     </article>

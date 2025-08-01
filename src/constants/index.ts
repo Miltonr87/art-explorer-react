@@ -1,6 +1,6 @@
 import { Artwork } from '../types';
 
-export const NUMBER_OF_ITEMS = 30;
+export const NUMBER_OF_ITEMS = 8;
 
 export const REQUESTED_FIELDS = [
   'objectID',

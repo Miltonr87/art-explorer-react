@@ -6,6 +6,10 @@ import { FavoriteButton } from '../../components/FavoriteButton';
 import { Modal } from '../../components/Modal';
 import { FallbackContent } from '../../components/FallbackContent';
 import { LINK_TO_HOME_PAGE } from '../../constants';
+import Back from '../../assets/icons/back.svg';
+
+const PLACEHOLDER_IMAGE =
+  'https://www.shutterstock.com/image-vector/no-painting-sign-forbidden-do-600nw-2647873923.jpg';
 
 export const ArtworkPage: React.FC = () => {
   const { id } = useParams();
@@ -49,6 +53,8 @@ export const ArtworkPage: React.FC = () => {
     is_public_domain,
   } = currentArtwork;
 
+  const imageSrc = image_id || PLACEHOLDER_IMAGE;
+
   return (
     <PageLayout isHomePage={false} className="artwork-page">
       {isModalOpen && image_id && (
@@ -65,18 +71,17 @@ export const ArtworkPage: React.FC = () => {
           relative="path"
           className="button button-navigate"
         >
-          Back
+          <img src={Back} alt="Back" className="button-back-icon" />
         </Link>
 
         <article className="artwork-details">
           <div className="artwork-details__image-container">
             <img
-              src={image_id}
+              src={imageSrc}
               alt={thumbnail?.alt_text ?? title}
-              onClick={handleOpenModal}
+              onClick={image_id ? handleOpenModal : undefined}
               onError={e => {
-                e.currentTarget.src =
-                  'https://placehold.co/843/f7d5a2/383838?text=no-image&font=lato';
+                e.currentTarget.src = PLACEHOLDER_IMAGE;
               }}
               className="artwork-details__image"
             />
