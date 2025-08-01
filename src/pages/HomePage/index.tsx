@@ -14,8 +14,7 @@ export const HomePage: React.FC = () => {
   const { search } = useLocation();
   const navigate = useNavigate();
 
-  const { darkMode, toggleTheme } = useTheme(); // ✅ Hook for theme toggle
-  console.log('Dark mode:', darkMode); // ✅ Log the current theme state
+  const { darkMode, toggleTheme } = useTheme();
 
   const searchParams = new URLSearchParams(search);
   const pageIndex = Number(searchParams.get('page') || 1) - 1;
@@ -55,25 +54,42 @@ export const HomePage: React.FC = () => {
         <h1 className="title">
           <span className="title title_accent">Art Collection</span>
         </h1>
-        <motion.button
+        <motion.div
           onClick={toggleTheme}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: 'spring', stiffness: 300 }}
           style={{
-            padding: '0.5rem 1.2rem',
-            fontSize: '0.9rem',
-            border: 'none',
-            borderRadius: '0.5rem',
+            width: '60px',
+            height: '30px',
+            borderRadius: '999px',
+            backgroundColor: darkMode ? '#f4f4f4' : '#333',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px',
             cursor: 'pointer',
-            backgroundColor: darkMode ? '#f4f4f4' : '#222',
-            color: darkMode ? '#222' : '#f4f4f4',
-            boxShadow: '0 0.4rem 0.8rem rgba(0, 0, 0, 0.1)',
-            transition: 'background-color 0.3s ease, color 0.3s ease',
+            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.2)',
           }}
+          initial={false}
+          animate={{
+            justifyContent: darkMode ? 'flex-end' : 'flex-start',
+          }}
+          transition={{ type: 'spring', stiffness: 700, damping: 30 }}
         >
-          {darkMode ? '☀️' : '🌙'}
-        </motion.button>
+          <motion.div
+            layout
+            transition={{ type: 'spring', stiffness: 900, damping: 30 }}
+            style={{
+              width: '25px',
+              height: '25px',
+              borderRadius: '50%',
+              backgroundColor: darkMode ? '#222' : '#f4f4f4',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.75rem',
+            }}
+          >
+            {darkMode ? '🌙' : '☀️'}
+          </motion.div>
+        </motion.div>
       </div>
 
       <SearchForm />
@@ -83,8 +99,8 @@ export const HomePage: React.FC = () => {
 
       {!isFetching && !isSearching && !error && artworks.length > 0 && (
         <SectionLayout
-          subtitle="Artworks for you"
           title="World Gallery of Art Masterpieces"
+          subtitle=""
           data-testid="artwork-list-section"
         >
           <div className="artwork-list">
