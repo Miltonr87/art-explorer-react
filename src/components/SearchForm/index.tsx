@@ -48,10 +48,9 @@ export const SearchForm: React.FC = () => {
   return (
     <div className="search-form">
       <div className="search-form__input-container">
-        <img src={searchIcon} alt="Search icon" />
         <input
           type="text"
-          placeholder="Search Art, Artist, Work..."
+          placeholder="Search Artist..."
           value={searchTerm}
           onChange={e => handleSearchTermChange(e.target.value)}
           maxLength={60}
@@ -69,7 +68,7 @@ export const SearchForm: React.FC = () => {
           className="search-form__search-button"
           disabled={searchTerm.trim() === ''}
         >
-          Search
+          <img src={searchIcon} alt="Search icon" />
         </button>
       </div>
 

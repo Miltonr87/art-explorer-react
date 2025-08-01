@@ -44,6 +44,47 @@
     }
   }
 
+  &__search-button {
+    width: a.rem(38);
+    height: a.rem(38);
+    border-radius: 50%;
+    border: none;
+    background-color: color.scale(a.$color-black, $lightness: 90%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 a.rem(4) a.rem(8) rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+
+    img {
+      width: a.rem(20);
+      height: a.rem(20);
+      // Removed invert filter
+      filter: none;
+    }
+
+    &:hover {
+      background-color: color.scale(a.$color-black, $lightness: 80%);
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+      background-color: color.scale(a.$color-black, $lightness: 70%);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background-color: color.scale(a.$color-black, $lightness: 95%);
+
+      img {
+        filter: grayscale(100%);
+      }
+    }
+  }
+
   &__error-list {
     @include a.flex-container($direction: column, $gap: a.rem(4));
   }
