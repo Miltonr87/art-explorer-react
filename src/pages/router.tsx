@@ -5,7 +5,7 @@ import { RouterType } from '../types';
 export const Router = () => {
   return (
     <Routes>
-      {(routes as RouterType[]).map(({ path, element, title }) => (
+      {(routes as unknown as RouterType[]).map(({ path, element, title }) => (
         <Route key={title} path={`/${path}`} element={element} />
       ))}
     </Routes>
