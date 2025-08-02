@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import '@testing-library/jest-dom';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
