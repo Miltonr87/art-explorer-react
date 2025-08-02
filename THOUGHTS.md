@@ -1,10 +1,10 @@
-# 🤔 THOUGHTS.md
+# THOUGHTS.md
 
-## 📌 Decisões Técnicas
+## Decisões Técnicas
 
 Este projeto foi desenvolvido com foco em escalabilidade e qualidade de código. Abaixo estão algumas decisões durante a implementação:
 
-### 📊 Limite de Requisições à API
+### Limite de Requisições à API
 
 A API pública do Met Museum não oferece suporte a paginação via backend. Isso exigiu a implementação de um controle de requisições no frontend, já que o fluxo padrão da API segue esta lógica:
 
@@ -15,7 +15,7 @@ Esse modelo tende a sobrecarregar o serviço em buscas mais extensas, vindo a ca
 
 ---
 
-## 🖼️ Inconsistências da API
+## Inconsistências da API
 
 Apesar de utilizar o endpoint:
 
@@ -38,7 +38,7 @@ Essas inconsistências geram a necessidade de criar um fallback de dados para qu
 
 ---
 
-## 🛠️ Stack e Configurações Modernas
+## Stack e Configurações Modernas
 
 Para garantir padronização e segurança no desenvolvimento, o projeto inclui configurado:
 
@@ -46,7 +46,7 @@ Para garantir padronização e segurança no desenvolvimento, o projeto inclui c
 - **Jest** para testes unitários e de integração (com +70% de cobertura).
 - **SonarQube** executado localmente para análise de cobertura e qualidade de código, já configurado para fácil integração com um servidor remoto caso necessário.
 
-## ⚙️ Simplificação de Estado
+## Simplificação de Estado
 
 Para evitar complexidade desnecessária com o uso de Redux (já que não há necessidade de middlewares nas requisições ou manipulação avançada de estado) optou-se pelo **Context API** para acelerar a entrega:
 
