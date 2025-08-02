@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const BASE_URL = 'https://collectionapi.metmuseum.org/public/collection/v1';
+
 export async function fetchData<T>(rawPath: string): Promise<T> {
   const path = rawPath.toString();
 
@@ -9,18 +11,19 @@ export async function fetchData<T>(rawPath: string): Promise<T> {
     );
   }
 
-  const url = new URL(`/api/public/collection/v1/${path}`, window.location.origin);
+  const url = `${BASE_URL}/${path}`;
 
   try {
-    const { data } = await axios.get<T>(url.toString());
+    const { data } = await axios.get<T>(url);
     return data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status ?? 'unknown';
       const message = error.message || 'Axios request failed';
-      throw new Error(`Failed to fetch data. HTTP Error: ${status} - ${message}`);
+      throw new Error(
+        `Failed to fetch data. HTTP Error: ${status} - ${message}`
+      );
     }
     throw new Error('An unexpected error occurred while fetching data.');
   }
 }
-

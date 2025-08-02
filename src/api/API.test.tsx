@@ -9,11 +9,12 @@ jest.mock('../utils/fetchData', () => ({
 
 const mockFetchData = fetchData as jest.Mock;
 
+// Helpers
 const mockSearchResponse: SearchResponse = {
   objectIDs: [1, 2, 3],
 };
 
-const mockRawArtwork = (id: number) => ({
+const createMockArtwork = (id: number) => ({
   objectID: id,
   title: `Title ${id}`,
   artistDisplayName: `Artist ${id}`,
@@ -26,17 +27,18 @@ const mockRawArtwork = (id: number) => ({
   isPublicDomain: true,
 });
 
-describe('API: fetchAvailableArtworks', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+// Setup
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
+describe('fetchAvailableArtworks', () => {
   it('returns paginated artworks with metadata', async () => {
     mockFetchData
       .mockResolvedValueOnce(mockSearchResponse) // search
-      .mockResolvedValue(mockRawArtwork(1)) // object fetch
-      .mockResolvedValueOnce(mockRawArtwork(2))
-      .mockResolvedValueOnce(mockRawArtwork(3));
+      .mockResolvedValueOnce(createMockArtwork(1))
+      .mockResolvedValueOnce(createMockArtwork(2))
+      .mockResolvedValueOnce(createMockArtwork(3));
 
     const response = await fetchAvailableArtworks(1);
 
@@ -50,9 +52,9 @@ describe('API: fetchAvailableArtworks', () => {
   it('skips artworks that fail to load', async () => {
     mockFetchData
       .mockResolvedValueOnce(mockSearchResponse)
-      .mockResolvedValueOnce(mockRawArtwork(1))
-      .mockRejectedValueOnce(new Error('fail')) // skip 2
-      .mockResolvedValueOnce(mockRawArtwork(3));
+      .mockResolvedValueOnce(createMockArtwork(1))
+      .mockRejectedValueOnce(new Error('Failed to load artwork 2'))
+      .mockResolvedValueOnce(createMockArtwork(3));
 
     const response = await fetchAvailableArtworks(1);
 
@@ -61,18 +63,15 @@ describe('API: fetchAvailableArtworks', () => {
   });
 });
 
-describe('API: fetchSearchResults', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
+describe('fetchSearchResults', () => {
   it('returns artworks for a search term', async () => {
     const searchTerm = 'mona';
+
     mockFetchData
-      .mockResolvedValueOnce(mockSearchResponse) // search response
-      .mockResolvedValueOnce(mockRawArtwork(1))
-      .mockResolvedValueOnce(mockRawArtwork(2))
-      .mockResolvedValueOnce(mockRawArtwork(3));
+      .mockResolvedValueOnce(mockSearchResponse)
+      .mockResolvedValueOnce(createMockArtwork(1))
+      .mockResolvedValueOnce(createMockArtwork(2))
+      .mockResolvedValueOnce(createMockArtwork(3));
 
     const response = await fetchSearchResults(searchTerm);
 
@@ -91,5 +90,6 @@ describe('API: fetchSearchResults', () => {
 
     expect(result.data).toEqual([]);
     expect(result.pagination.total).toBe(0);
+    expect(result.pagination.current_page).toBe(1);
   });
 });
