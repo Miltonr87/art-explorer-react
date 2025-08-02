@@ -41,3 +41,9 @@ export interface ArtworksResponse {
 export interface SearchResponse {
   objectIDs?: number[];
 }
+
+export interface ArtworksContextType {
+  setArtworks: (data: Artwork[]) => void;
+  isSearching: boolean;
+  setIsSearching: (value: boolean) => void;
+}

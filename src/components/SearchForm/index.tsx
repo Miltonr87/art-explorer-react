@@ -1,10 +1,10 @@
 import { useState, useContext, useCallback } from 'react';
 import { ArtworksContext } from '../../store';
-import { fetchSearchResults } from '../../api';
+import { runSearchAction } from '../../utils/searchService';
 import { validateInput } from '../../utils/validationFunctions';
 import searchIcon from '../../assets/icons/search-icon.svg';
 
-export const SearchForm: React.FC = () => {
+export const SearchForm = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
   const [noResults, setNoResults] = useState(false);
@@ -13,25 +13,18 @@ export const SearchForm: React.FC = () => {
     useContext(ArtworksContext);
 
   const handleSearchClick = async () => {
-    const term = searchTerm.toLowerCase().trim();
-    const errorsFound = validateInput(term);
-    setErrors(errorsFound);
-    if (errorsFound.length > 0) return;
+    const result = await runSearchAction(
+      searchTerm,
+      setArtworks,
+      setIsSearching,
+    );
 
-    setIsSearching(true);
-    try {
-      const response = await fetchSearchResults(term);
-      if (!response.data.length) {
-        setNoResults(true);
-        setArtworks([]);
-      } else {
-        setNoResults(false);
-        setArtworks(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    } finally {
-      setIsSearching(false);
+    if (result.hasErrors) {
+      setErrors(validateInput(searchTerm));
+      setNoResults(false);
+    } else {
+      setErrors([]);
+      setNoResults(result.results?.length === 0);
     }
   };
 

@@ -20,7 +20,9 @@
   "include": [
     "src",
     "__mocks__",
-    "jest.config.ts"
+    "jest.config.ts",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ],
   "exclude": [
     "node_modules",
@@ -28,16 +30,7 @@
     "build",
     "coverage",
     "public",
-    "src/**/*.test.tsx",
-    "src/**/*.test.ts",
-    "src/**/*.spec.tsx",
-    "src/**/*.spec.ts",
     "src/setupTests.ts",
-    "src/vite-env.d.ts",
-    "src/assets",
-    "src/styles",
-    "src/components/Header.tsx",
-    "src/components/Footer.tsx",
-    "src/components/Sidebar.tsx"
+    "src/vite-env.d.ts"
   ]
 }
