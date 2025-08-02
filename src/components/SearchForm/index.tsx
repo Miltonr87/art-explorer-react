@@ -1,42 +1,16 @@
-import { useState, useContext, useCallback } from 'react';
-import { ArtworksContext } from '../../store';
-import { runSearchAction } from '../../utils/searchService';
-import { validateInput } from '../../utils/validationFunctions';
+import { useSearch } from '../../hooks/useSearch';
 import searchIcon from '../../assets/icons/search-icon.svg';
 
 export const SearchForm = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [errors, setErrors] = useState<string[]>([]);
-  const [noResults, setNoResults] = useState(false);
-
-  const { setArtworks, isSearching, setIsSearching } =
-    useContext(ArtworksContext);
-
-  const handleSearchClick = async () => {
-    const result = await runSearchAction(
-      searchTerm,
-      setArtworks,
-      setIsSearching,
-    );
-
-    if (result.hasErrors) {
-      setErrors(validateInput(searchTerm));
-      setNoResults(false);
-    } else {
-      setErrors([]);
-      setNoResults(result.results?.length === 0);
-    }
-  };
-
-  const handleSearchTermChange = useCallback((value: string) => {
-    setSearchTerm(value.toLowerCase());
-  }, []);
-
-  const handleClearSearchTerm = useCallback(() => {
-    setSearchTerm('');
-    setErrors([]);
-    setNoResults(false);
-  }, []);
+  const {
+    searchTerm,
+    errors,
+    noResults,
+    isSearching,
+    handleSearchTermChange,
+    handleClearSearchTerm,
+    handleSearchClick,
+  } = useSearch();
 
   return (
     <div className="search-form">
