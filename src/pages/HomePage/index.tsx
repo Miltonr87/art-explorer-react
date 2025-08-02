@@ -103,7 +103,7 @@ export const HomePage: React.FC = () => {
           subtitle=""
           data-testid="artwork-list-section"
         >
-          <div className="artwork-list">
+          <div className="artwork-list" data-testid="artwork-list-section">
             {currentArtworks.map(artwork => (
               <ArtworkCard key={artwork.id} artwork={artwork} />
             ))}

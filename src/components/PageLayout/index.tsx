@@ -1,19 +1,21 @@
-import { Footer } from '../Footer';
+import { ReactNode } from 'react';
 import { Header } from '../Header';
+import { Footer } from '../Footer';
 
-interface PageWrapperProps {
-  isHomePage: boolean;
-  children: React.ReactNode;
-  className: string;
+interface PageLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+  isHomePage?: boolean;
+  className?: string;
 }
 
-export const PageLayout: React.FC<PageWrapperProps> = ({
-  isHomePage,
+export const PageLayout: React.FC<PageLayoutProps> = ({
   children,
-  className,
+  isHomePage = false,
+  className = '',
+  ...rest
 }) => {
   return (
-    <div className={className}>
+    <div className={`${className}`} {...rest}>
       <Header isHomePage={isHomePage} />
       <main>
         <div className="wrapper">{children}</div>

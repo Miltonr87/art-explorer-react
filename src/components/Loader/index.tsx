@@ -1,7 +1,7 @@
 export const Loader: React.FC = () => {
   return (
     <div className="container">
-      <span className="loader"></span>
+      <span className="loader" data-testid="loader"></span>
     </div>
   );
 };

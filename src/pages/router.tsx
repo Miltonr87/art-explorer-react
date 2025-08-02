@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { routes } from './pagesData';
+import { routes } from './routes';
 import { RouterType } from '../types';
 
 export const Router = () => {
