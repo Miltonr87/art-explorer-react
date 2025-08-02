@@ -17,3 +17,5 @@ export const Sparkle: React.FC = () => (
     }}
   />
 );
+
+// This component creates a sparkle effect using Framer Motion for animations.

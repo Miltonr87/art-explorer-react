@@ -1,4 +1,3 @@
-// src/context/ThemeContext.tsx
 import {
   createContext,
   useContext,
@@ -38,4 +37,5 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => useContext(ThemeContext);

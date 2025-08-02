@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-
 interface FallbackContentProps {
   children: React.ReactNode;
   link?: {
@@ -19,3 +18,5 @@ export const FallbackContent: React.FC<FallbackContentProps> = ({
     </div>
   );
 };
+
+// Generic Wrapper to display a message when some main content fails to load or returns empty

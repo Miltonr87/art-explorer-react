@@ -8,7 +8,6 @@ interface ModalProps {
 }
 
 export const Modal: React.FC<ModalProps> = ({ imageId, altText, onClose }) => {
-  console.log('Modal rendered with imageId:', imageId, 'and altText:', altText);
   const modalRoot = document.getElementById('modal-root');
 
   return createPortal(
