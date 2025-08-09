@@ -25,6 +25,20 @@ export interface Artwork {
   is_public_domain: boolean;
 }
 
+export interface RawArtwork {
+  objectID: number;
+  title: string;
+  artistDisplayName: string;
+  accessionNumber: string;
+  objectDate: string;
+  country: string;
+  creditLine: string;
+  dimensions: string;
+  primaryImageSmall?: string;
+  primaryImage?: string;
+  isPublicDomain: boolean;
+}
+
 export interface Pagination {
   total: number;
   limit: number;

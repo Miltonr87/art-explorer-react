@@ -1,20 +1,6 @@
 import { fetchData } from '../utils/fetchData';
 import { NUMBER_OF_ITEMS } from '../constants';
-import { ArtworksResponse, Artwork, SearchResponse } from '../types';
-
-interface RawArtwork {
-  objectID: number;
-  title: string;
-  artistDisplayName: string;
-  accessionNumber: string;
-  objectDate: string;
-  country: string;
-  creditLine: string;
-  dimensions: string;
-  primaryImageSmall?: string;
-  primaryImage?: string;
-  isPublicDomain: boolean;
-}
+import { ArtworksResponse, Artwork, SearchResponse, RawArtwork, Pagination } from '../types';
 
 function transformArtwork(data: RawArtwork): Artwork {
   return {
@@ -37,77 +23,55 @@ function transformArtwork(data: RawArtwork): Artwork {
   };
 }
 
-export interface Pagination {
-  total: number;
-  limit: number;
-  offset: number;
-  total_pages: number;
-  current_page: number;
-}
-
-export async function fetchAvailableArtworks(page: number = 1): Promise<ArtworksResponse> {
-  const searchPath = 'search?hasImages=true&q=painting';
-  const searchResponse = await fetchData<SearchResponse>(searchPath);
-  const allIds: number[] = searchResponse.objectIDs || [];
-
-  const offset = (page - 1) * NUMBER_OF_ITEMS;
-  const paginatedIds = allIds.slice(offset, offset + NUMBER_OF_ITEMS);
-
-  const artworkDetails = await Promise.all(
-    paginatedIds.map(async (id: number) => {
+async function fetchArtworksByIds(ids: number[]): Promise<Artwork[]> {
+  const results = await Promise.all(
+    ids.map(async (id) => {
       try {
-        const rawData = await fetchData<RawArtwork>(`objects/${id}`);
-        return transformArtwork(rawData);
-      } catch {
-        return null;
+        const raw = await fetchData<RawArtwork>(`objects/${id}`);
+        return transformArtwork(raw);
+      } catch (err) {
+        console.error('Error fetching artworks:', err);
+        throw err;
       }
     })
   );
+  return results.filter(Boolean) as Artwork[];
+}
 
-  const data = artworkDetails.filter(Boolean) as Artwork[];
+function buildPagination(total: number, page: number, limit: number): Pagination {
+  const offset = (page - 1) * limit;
+  return {
+    total,
+    limit,
+    offset,
+    total_pages: Math.ceil(total / limit),
+    current_page: page,
+  };
+}
+
+export async function fetchAvailableArtworks(page = 1): Promise<ArtworksResponse> {
+  const searchResponse = await fetchData<SearchResponse>('search?hasImages=true&q=painting');
+  const allIds = searchResponse.objectIDs ?? [];
+
+  const start = (page - 1) * NUMBER_OF_ITEMS;
+  const paginatedIds = allIds.slice(start, start + NUMBER_OF_ITEMS);
+  const data = await fetchArtworksByIds(paginatedIds);
 
   return {
-    pagination: {
-      total: allIds.length,
-      limit: NUMBER_OF_ITEMS,
-      offset,
-      total_pages: Math.ceil(allIds.length / NUMBER_OF_ITEMS),
-      current_page: page,
-    },
+    pagination: buildPagination(allIds.length, page, NUMBER_OF_ITEMS),
     data,
   };
 }
 
 export async function fetchSearchResults(searchTerm: string): Promise<ArtworksResponse> {
-  const query = encodeURIComponent(searchTerm.trim());
-  const searchPath = `search?artistOrCulture=true&q=${query}`;
-
-  const searchResponse = await fetchData<SearchResponse>(searchPath);
-  const allIds: number[] = searchResponse.objectIDs || [];
-
+  const q = encodeURIComponent(searchTerm.trim());
+  const searchResponse = await fetchData<SearchResponse>(`search?artistOrCulture=true&q=${q}`);
+  const allIds = searchResponse.objectIDs ?? [];
   const paginatedIds = allIds.slice(0, NUMBER_OF_ITEMS);
-
-  const artworkDetails = await Promise.all(
-    paginatedIds.map(async (id: number) => {
-      try {
-        const rawData = await fetchData<RawArtwork>(`objects/${id}`);
-        return transformArtwork(rawData);
-      } catch {
-        return null;
-      }
-    })
-  );
-
-  const data = artworkDetails.filter(Boolean) as Artwork[];
+  const data = await fetchArtworksByIds(paginatedIds);
 
   return {
-    pagination: {
-      total: allIds.length,
-      limit: NUMBER_OF_ITEMS,
-      offset: 0,
-      total_pages: Math.ceil(allIds.length / NUMBER_OF_ITEMS),
-      current_page: 1,
-    },
+    pagination: buildPagination(allIds.length, 1, NUMBER_OF_ITEMS),
     data,
   };
 }
