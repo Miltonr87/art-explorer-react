@@ -1,31 +1,24 @@
-import { useContext, useState } from 'react';
-import { FavoritesContext } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { addFavorite, removeFavorite } from '../../store/favoritesSlice';
 import { Artwork } from '../../types';
 import bookmarkIcon from '../../assets/icons/bookmark-icon.svg';
-import { motion } from 'framer-motion';
 
 interface FavoriteButtonProps {
   artwork: Artwork;
 }
 
 export const FavoriteButton: React.FC<FavoriteButtonProps> = ({ artwork }) => {
-  const { favoriteArtworks, handleFavoriteAdd, handleFavoriteRemove } =
-    useContext(FavoritesContext);
-
-  const [pulse, setPulse] = useState(false);
+  const dispatch = useDispatch();
+  const favoriteArtworks = useSelector((state: RootState) => state.favorites.favoriteArtworks);
 
   const isFavorite = favoriteArtworks.some(item => item.id === artwork.id);
 
   const handleFavoriteClick = () => {
-    setPulse(true);
-    setTimeout(() => setPulse(false), 300);
-
     if (isFavorite) {
-      handleFavoriteRemove(artwork.id);
-      console.log(`Removing artwork with ID: ${artwork.id} from favorites`);
+      dispatch(removeFavorite(artwork.id));
     } else {
-      handleFavoriteAdd(artwork);
-      console.log(`Adding artwork with ID: ${artwork.id} to favorites`);
+      dispatch(addFavorite(artwork));
     }
   };
 
@@ -34,15 +27,7 @@ export const FavoriteButton: React.FC<FavoriteButtonProps> = ({ artwork }) => {
       onClick={handleFavoriteClick}
       className={`button button-favorite ${isFavorite && 'active'}`}
     >
-      <motion.img
-        key={pulse ? 'pulse' : 'static'}
-        src={bookmarkIcon}
-        alt="Bookmark icon"
-        initial={{ scale: 1 }}
-        animate={pulse ? { scale: [1, 1.4, 1] } : { scale: 1 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        style={{ width: '24px', height: '24px' }}
-      />
+      <img src={bookmarkIcon} alt="Bookmark icon" />
     </button>
   );
 };
